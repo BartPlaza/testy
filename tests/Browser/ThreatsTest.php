@@ -12,9 +12,10 @@ class ThreatsTest extends DuskTestCase
 
     public function testAUserCanBrowseAllThreads()
     {
-        $this->browse(function (Browser $browser) {
-        	$thread = factory('App\Thread')->create();
+    	$thread = factory('App\Thread')->create();
 
+        $this->browse(function (Browser $browser) use($thread){
+ 
             $browser->visit('/threads')
                     ->assertSee($thread->title);
 
@@ -23,11 +24,24 @@ class ThreatsTest extends DuskTestCase
 
     public function testAUserCanBrowseThread()
     {
-        $this->browse(function (Browser $browser) {
-        	$thread = factory('App\Thread')->create();
+    	$thread = factory('App\Thread')->create();
+
+        $this->browse(function (Browser $browser) use($thread){
 
             $browser->visit('/threads/'.$thread->id)
                     ->assertSee($thread->title);
+        });
+    }
+
+     public function testAUserCanReadRepliesOnThread()
+    {
+    	$thread = factory('App\Thread')->create();
+    	$reply = factory('App\Reply')->create(['thread_id'=>$thread->id]);
+    	
+        $this->browse(function (Browser $browser) use($thread, $reply){
+
+            $browser->visit('/threads/'.$thread->id)
+                    ->assertSee($reply->body);
         });
     }
 }
