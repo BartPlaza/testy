@@ -28,7 +28,7 @@ class ReadThreatsTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use($thread){
 
-            $browser->visit('/threads/'.$thread->id)
+            $browser->visit($thread->path())
                     ->assertSee($thread->title);
         });
     }
@@ -40,8 +40,22 @@ class ReadThreatsTest extends DuskTestCase
     	
         $this->browse(function (Browser $browser) use($thread, $reply){
 
-            $browser->visit('/threads/'.$thread->id)
+            $browser->visit($thread->path())
                     ->assertSee($reply->body);
+        });
+    }
+
+    public function testAUserCanFilterThreadsBySlug()
+    {
+    	$channel = factory('App\Channel')->create();
+    	$threadInChannel = factory('App\Thread')->create(['channel_id' => $channel->id]);
+    	$threadNotInChannel = factory('App\Thread')->create();
+
+    	$this->browse(function (Browser $browser) use($channel, $threadInChannel, $threadNotInChannel){
+
+            $browser->visit($channel->path())
+                    ->assertSee($threadInChannel->title)
+                    ->assertDontSee($threadNotInChannel->title);
         });
     }
 }

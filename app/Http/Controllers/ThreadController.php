@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Thread;
+use App\Channel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,9 +14,15 @@ class ThreadController extends Controller
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index()
+    public function index(Channel $channel)
     {
-        $threads = Thread::latest()->get();
+
+        if($channel->exists){ 
+            $threads = $channel->threads;
+        } else {
+            $threads = Thread::latest()->get();
+        }
+
         return view('threads.index', compact('threads'));
     }
 
@@ -37,15 +44,23 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->validate($request, [
+            'title' => 'required',
+            'body' => 'required',
+            'channel' => 'required|exists:channels,id'
+        ]);
+
         $thread = new Thread;
 
         $thread->user_id = Auth::id();
         $thread->title = request('title');
         $thread->body = request('body');
+        $thread->channel_id = request('channel');
 
         $thread->save();
 
-        return redirect('/threads/'. $thread->id);
+        return redirect($thread->path());
     }
 
     /**
@@ -54,7 +69,7 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show($channel, Thread $thread)
     {
         return view('threads.show', compact('thread'));
     }

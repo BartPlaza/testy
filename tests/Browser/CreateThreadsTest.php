@@ -14,14 +14,16 @@ class CreateThreadsTest extends DuskTestCase
     {
 
         $user = factory('App\User')->create();
+        $channel = factory('App\Channel')->create();
 
-        $this->browse(function (Browser $browser) use($user) {
+        $this->browse(function (Browser $browser) use($user, $channel) {
             $browser->loginAs($user)
                     ->visit('/threads/create')
                     ->type('title', 'example title')
                     ->type('body', 'example body')
+                    ->select('channel', $channel->id)
                     ->click('@thread-create')
-                    ->assertSee('example body');         
+                    ->assertSee('posted: example title');         
         });
     }
 
@@ -32,4 +34,6 @@ class CreateThreadsTest extends DuskTestCase
                     ->assertPathIs('/login');         
         });
     }
+
+    
 }

@@ -14,8 +14,12 @@ class ReplyController extends Controller
 		$this->middleware('auth');
 	}
 
-    public function store(Thread $thread)
+    public function store($channel, Thread $thread)
     {
+    	$this->validate($request[
+    		'body' => 'required'
+    	]);
+
     	$thread->addReply([
     		'user_id' => Auth::id(),
     		'body' => request('body')

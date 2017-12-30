@@ -17,7 +17,7 @@ class ParticipateThreadTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use($user, $thread){
             $browser->loginAs($user)
-                    ->visit('/threads/'.$thread->id)
+                    ->visit($thread->path())
                     ->type('body','testing reply')
                     ->click('@reply-store')
                     ->assertSee('testing reply');
