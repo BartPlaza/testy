@@ -6,7 +6,7 @@ use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class ThreatsTest extends DuskTestCase
+class ReadThreatsTest extends DuskTestCase
 {
     use DatabaseMigrations;
 
