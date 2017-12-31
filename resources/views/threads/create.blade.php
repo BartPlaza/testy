@@ -12,21 +12,32 @@
                         {{csrf_field()}}
                         <div class="form-group">
                             <label for="channel">Channel</label>
-                            <select class="form-control" name="channel" id="channel">
-                                @foreach(App\Channel::all() as $channel)
-                                    <option value="{{$channel->id}}">{{$channel->name}}</option>
+                            <select class="form-control" name="channel" id="channel" required>
+                                @foreach($channels as $channel)
+                                    <option value="{{$channel->id}}" {{old('channel') == $channel->id ? 'selected' : ''}}>
+                                            {{$channel->name}}
+                                        </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="title">Title</label>
-                            <input type="text" class="form-control" name="title" id="title" placeholder="title">
+                            <input type="text" class="form-control" name="title" id="title" placeholder="title" value="{{old('title')}}" required>
                         </div>
                         <div class="form-group">
                             <label for="body">Body</label>
-                            <textarea class="form-control" name="body" id="body" placeholder="body" rows="5"></textarea>
+                            <textarea class="form-control" name="body" id="body" placeholder="body" rows="5" required>{{old('body')}}</textarea>
                         </div>
-                        <button type="submit" class="btn btn-default" dusk="thread-create">Publish</button>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default" dusk="thread-create">Publish</button>
+                        </div>
+                        @if(Count($errors))
+                        <div class="form-gorup">  
+                            @foreach($errors->all() as $error)
+                            <p class="alert alert-danger">{{$error}}</li>
+                            @endforeach  
+                        </div>
+                        @endif
                    </form> 
                 </div>
             </div>
