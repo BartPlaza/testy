@@ -20,7 +20,7 @@ class ParticipateThreadTest extends DuskTestCase
                     ->visit($thread->path())
                     ->type('body','testing reply')
                     ->click('@reply-store')
-                    ->assertSee('testing reply');
+                    ->assertSee($user->name . ' said');
         });
     }
 }
