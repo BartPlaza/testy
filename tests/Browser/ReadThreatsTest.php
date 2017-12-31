@@ -58,5 +58,19 @@ class ReadThreatsTest extends DuskTestCase
                     ->assertDontSee($threadNotInChannel->title);
         });
     }
+
+    public function testAUserCanFilterThreadsByUsername()
+    {
+    	$user = factory('App\User')->create(['name'=>'tester']);
+    	$threadByTester = factory('App\Thread')->create(['user_id'=>$user->id]);
+    	$threadByOther = factory('App\Thread')->create();  
+
+    	$this->browse(function (Browser $browser) use($user, $threadByTester, $threadByOther){
+
+            $browser->visit('/threads?by=tester')
+                    ->assertSee($threadByTester->title)
+                    ->assertDontSee($threadByOther->title);
+        });
+    }
 }
 				

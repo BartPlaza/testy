@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Reply;
+use App\User;
 
 class Thread extends Model
 {
@@ -37,4 +38,9 @@ class Thread extends Model
 
     	$newReply->save();
     } 
+
+    public function scopeCreatedBy($query, $userName){
+    	$user = User::where('name', $userName)->firstOrFail();
+    	return $query->where('user_id', $user->id);
+    }
 }

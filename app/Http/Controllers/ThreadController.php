@@ -20,7 +20,14 @@ class ThreadController extends Controller
         if($channel->exists){ 
             $threads = $channel->threads;
         } else {
-            $threads = Thread::latest()->get();
+            $threads = Thread::query();
+
+            //Check filtering by user name
+            if(request('by')){
+                $threads->createdBy(request('by'));
+            }
+    
+            $threads = $threads->latest()->get();
         }
 
         return view('threads.index', compact('threads'));
