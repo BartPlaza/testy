@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Favorite;
+use App\Reply;
 
 class FavoritController extends Controller
 {
@@ -15,5 +14,7 @@ class FavoritController extends Controller
     public function store(Reply $reply)
     {
     	$reply->favorite();
+
+    	return back();
     }
 }
