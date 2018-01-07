@@ -72,5 +72,23 @@ class ReadThreatsTest extends DuskTestCase
                     ->assertDontSee($threadByOther->title);
         });
     }
+
+    public function testAUserCanFilterThreadsByPopularity()
+    {
+        $threadTwoReplies = factory('App\Thread')->create();
+        factory('App\Reply',2)->create(['thread_id' => $threadTwoReplies->id]);
+
+        $threadThreeReplies = factory('App\Thread')->create();
+        factory('App\Reply',3)->create(['thread_id' => $threadThreeReplies->id]);
+
+        $threadNoReplies = factory('App\Thread')->create();
+
+        $this->browse(function (Browser $browser) use($threadTwoReplies, $threadThreeReplies, $threadNoReplies){
+
+            $browser->visit('/threads?popular=1')
+                    ->assertSeeIn('article:first-child', $threadThreeReplies->body)
+                    ->assertSeeIn('article:last-child', $threadNoReplies->body);
+        });
+    }
 }
 				

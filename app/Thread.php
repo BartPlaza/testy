@@ -43,4 +43,8 @@ class Thread extends Model
     	$user = User::where('name', $userName)->firstOrFail();
     	return $query->where('user_id', $user->id);
     }
+
+    public function scopePopular($query){
+        $query->withCount('replies')->orderBy('replies_count', 'des');
+    }
 }

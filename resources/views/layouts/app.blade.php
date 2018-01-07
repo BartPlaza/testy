@@ -12,6 +12,16 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+    body {
+        padding-bottom: 100px;
+    }
+    .level {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -43,6 +53,7 @@
                                  @if(Auth::check())
                                  <li><a href="/threads?by={{Auth::user()->name}}">My threads</a></li>
                                  @endif
+                                 <li><a href="/threads?popular=1">Popular threads</a></li>
                             </ul>
                         </li>
                         <li><a href="/threads/create">Create thread</a></li>

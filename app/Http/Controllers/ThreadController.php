@@ -26,6 +26,11 @@ class ThreadController extends Controller
             if(request('by')){
                 $threads->createdBy(request('by'));
             }
+
+            //Check filtering by popular
+            if(request('popular')){
+                $threads->popular();
+            }
     
             $threads = $threads->latest()->get();
         }
